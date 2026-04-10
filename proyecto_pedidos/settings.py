@@ -70,17 +70,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'proyecto_pedidos.wsgi.application'
 
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bd_pedidos',
-        'USER': 'root',
-        'PASSWORD': 'Sperez25.',
-        'HOST': '127.0.0.1',
-        'PORT': '3307',
+# Base de datos — Producción: Railway | Local: MySQL Workbench
+RAILWAY_DB = os.environ.get('MYSQL_PUBLIC_URL', '')
+
+if RAILWAY_DB:
+    import urllib.parse
+    url = urllib.parse.urlparse(RAILWAY_DB)
+    DATABASES = {
+        'default': {
+            'ENGINE':   'django.db.backends.mysql',
+            'NAME':     url.path[1:],
+            'USER':     url.username,
+            'PASSWORD': url.password,
+            'HOST':     url.hostname,
+            'PORT':     str(url.port),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE':   'django.db.backends.mysql',
+            'NAME':     'bd_pedidos',
+            'USER':     'root',
+            'PASSWORD': 'Sperez25.',
+            'HOST':     '127.0.0.1',
+            'PORT':     '3307',
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
