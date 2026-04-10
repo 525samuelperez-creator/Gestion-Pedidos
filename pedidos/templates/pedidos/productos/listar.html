@@ -1,0 +1,45 @@
+{% extends 'pedidos/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Lista de Productos</h1>
+    <a href="{% url 'crear_producto' %}" class="btn btn-primary"><i class="bi bi-box-fill"></i> Nuevo Producto</a>
+</div>
+
+<div class="table-responsive bg-white p-3 rounded shadow-sm">
+    <table class="table table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.id }}</td>
+                <td>{{ producto.nombre }}</td>
+                <td>${{ producto.precio }}</td>
+                <td>{{ producto.stock }}</td>
+                <td>
+                    <a href="{% url 'editar_producto' producto.id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
+                    <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion('{% url 'eliminar_producto' producto.id %}')"><i class="bi bi-trash"></i></button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No hay productos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Render pagination -->
+<div class="mt-4">
+    {% include 'pedidos/paginacion.html' with page_obj=productos %}
+</div>
+{% endblock %}

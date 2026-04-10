@@ -1,0 +1,22 @@
+{% extends 'pedidos/base.html' %}
+
+{% block content %}
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h1>{{ titulo }}</h1>
+    </div>
+    <div class="col-auto">
+        <a href="javascript:history.back()" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'pedidos/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Detalles del Pedido #{{ pedido.id }}</h1>
+    <a href="{% url 'listar_pedidos' %}" class="btn btn-secondary">Volver a Pedidos</a>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">Información del Pedido</div>
+            <div class="card-body">
+                <p><strong>Cliente:</strong> {{ pedido.cliente.nombre }}</p>
+                <p><strong>Fecha:</strong> {{ pedido.fecha|date:"d/m/Y" }}</p>
+                <p><strong>Estado:</strong> 
+                    <span class="badge {% if pedido.estado == 'pendiente' %}bg-warning{% elif pedido.estado == 'enviado' %}bg-info{% else %}bg-success{% endif %}">
+                        {{ pedido.get_estado_display }}
+                    </span>
+                </p>
+                <h4>Total General: ${{ total }}</h4>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">Añadir Producto</div>
+            <div class="card-body">
+                <form method="post" action="{% url 'ver_pedido' pedido.id %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success w-100 mt-2">Añadir al Pedido</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">Productos en este pedido</div>
+            <div class="card-body p-0">
+                <table class="table table-hover m-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio Un.</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detalle in detalles %}
+                        <tr>
+                            <td>{{ detalle.producto.nombre }}</td>
+                            <td>${{ detalle.producto.precio }}</td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td>${{ detalle.subtotal }}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion('{% url 'eliminar_detalle' detalle.id %}')"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center p-3">No hay productos en este pedido aún.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
