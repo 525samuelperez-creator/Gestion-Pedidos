@@ -208,6 +208,9 @@ def editar_pedido(request, pk):
 @login_required
 def eliminar_pedido(request, pk):
     pedido = get_object_or_404(Pedido, pk=pk)
+    if pedido.estado in ['pendiente', 'enviado', 'entregado']:
+        messages.error(request, "No se puede eliminar un pedido en estado pendiente, enviado o entregado.")
+        return redirect('listar_pedidos')
     for detalle in pedido.detalles.all():
         detalle.producto.stock += detalle.cantidad
         detalle.producto.save()
@@ -406,6 +409,8 @@ class PedidoDetalleAPIView(APIView):
 
     def delete(self, request, pk):
         pedido = get_object_or_404(Pedido, pk=pk)
+        if pedido.estado in ['pendiente', 'enviado', 'entregado']:
+            return Response({'error': 'No se puede eliminar un pedido en estado pendiente, enviado o entregado.'}, status=status.HTTP_400_BAD_REQUEST)
         for detalle in pedido.detalles.all():
             detalle.producto.stock += detalle.cantidad
             detalle.producto.save()

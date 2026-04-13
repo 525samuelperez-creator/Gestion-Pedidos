@@ -136,8 +136,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME':  timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME':  timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'SIGNING_KEY': 'Sperez25_GestionPedidos_2024!xK#mN9qL',
     'ALGORITHM': 'HS256',
     'USER_ID_FIELD': 'id',

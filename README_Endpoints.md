@@ -9,6 +9,30 @@ Estas rutas NO devuelven HTML. Están diseñadas para consumirse mediante aplica
 |---|---|---|---|
 | `POST` | `/api/token/` | Autentica al usuario y genera tokens (Access + Refresh). | `{"username": "...", "password": "..."}` |
 | `POST` | `/api/token/refresh/`| Genera un nuevo Access Token enviando el Refresh Token anterior. | `{"refresh": "..."}` |
+| `POST` | `/api/token/verify/` | Verifica si un token JWT es válido. | `{"token": "..."}` |
+| `POST` | `/pedidos/api/login/` | Login personalizado que devuelve `access`, `refresh` y `usuario`. | `{"username": "...", "password": "..."}` |
+
+> Para usar los endpoints protegidos con JWT, añade el header:
+> `Authorization: Bearer <access_token>`
+
+### 📡 Endpoints API protegidos (requieren token)
+| Método | Ruta | Descripción | Body Requerido (JSON) |
+|---|---|---|---|
+| `GET` | `/pedidos/api/clientes/` | Lista todos los clientes. | - |
+| `POST` | `/pedidos/api/clientes/` | Crea un cliente. | `{"nombre":"...","correo":"...","direccion":"...","telefono":"..."}` |
+| `GET` | `c<id>/` | Obtiene un cliente por ID. | - |
+| `PUT` | `/pedidos/api/clientes/<id>/` | Actualiza un cliente. | `{"nombre":"...","correo":"...","direccion":"...","telefono":"..."}` |
+| `DELETE` | `/pedidos/api/clientes/<id>/` | Elimina un cliente (si no tiene pedidos). | - |
+| `GET` | `/pedidos/api/productos/` | Lista todos los productos. | - |
+| `POST` | `/pedidos/api/productos/` | Crea un producto. | `{"nombre":"...","precio":123.45,"stock":10}` |
+| `GET` | `/pedidos/api/productos/<id>/` | Obtiene un producto por ID. | - |
+| `PUT` | `/pedidos/api/productos/<id>/` | Actualiza un producto. | `{"nombre":"...","precio":123.45,"stock":10}` |
+| `DELETE` | `/pedidos/api/productos/<id>/` | Elimina un producto. | - |
+| `GET` | `/pedidos/api/pedidos/` | Lista todos los pedidos. | - |
+| `POST` | `/pedidos/api/pedidos/` | Crea un pedido. | `{"cliente":1,"estado":"pendiente"}` |
+| `GET` | `/pedidos/api/pedidos/<id>/` | Obtiene un pedido por ID. | - |
+| `PUT` | `/pedidos/api/pedidos/<id>/` | Actualiza un pedido. | `{"cliente":1,"estado":"enviado"}` |
+| `DELETE` | `/pedidos/api/pedidos/<id>/` | Elimina un pedido y repone stock. | - |
 
 ---
 
